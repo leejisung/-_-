@@ -60,11 +60,82 @@ public class game_manager : MonoBehaviour
         player2_tec = int.Parse(player2_tec_input.text);
 
     }
+
+    void battle()
+    {
+        while(true)
+        {
+            int first_attack;
+            string print_text = "";
+            while (true)
+            {
+                int p1_first_attack = Random.Range(0, player1_tec);
+                int p2_first_attack = Random.Range(0, player2_tec);
+
+                if (p1_first_attack > p2_first_attack)
+                {
+                    first_attack = 1;
+                    break;
+                }
+                if (p1_first_attack < p2_first_attack)
+                {
+                    first_attack = 2;
+                    break;
+                }
+            }
+            if (first_attack == 1)
+            {
+                int damage = Random.Range(0, player1_atk) - Random.Range(0, player2_def);
+                if (damage < 0)
+                {
+                    damage = 0;
+                }
+                if (damage == 0)
+                {
+                    print_text = player1_name + "의 공격 그러나 " + player2_name + "에게 막혔다.";
+                }
+                else
+                {
+                    print_text = player1_name + "의 공격 " + player2_name + "는 " + damage + "데미지를 입었다.";
+                    player2_hp = player2_hp - damage;
+                }
+            }
+            if (first_attack == 2)
+            {
+                int damage = Random.Range(0, player2_atk) - Random.Range(0, player1_def);
+                if (damage < 0)
+                {
+                    damage = 0;
+                }
+                if (damage == 0)
+                {
+                    print_text = player2_name + "의 공격 그러나 " + player1_name + "에게 막혔다.";
+                }
+                else
+                {
+                    print_text = player2_name + "의 공격 " + player1_name + "는 " + damage + "데미지를 입었다.";
+                    player1_hp = player2_hp - damage;
+                }
+            }
+
+            Debug.Log(print_text);
+
+            if (player1_hp < 1)
+            {
+                break;
+            }
+            if (player2_hp < 1)
+            {
+                break;
+            }
+        }
+    }
     
 
     public void On_click()
     {
         status_setting();
+        battle();
         
     }
 }
