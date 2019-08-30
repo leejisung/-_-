@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class game_manager : MonoBehaviour
 
 {
+    public Text text_window;
+
     public Text player1_name_input;
     public Text player1_atk_input;
     public Text player1_def_input;
@@ -35,7 +37,7 @@ public class game_manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -52,7 +54,7 @@ public class game_manager : MonoBehaviour
         player1_atk = int.Parse(player1_atk_input.text);
         player1_def = int.Parse(player1_def_input.text);
         player1_tec = int.Parse(player1_tec_input.text);
-        
+
 
         player2_name = player2_name_input.text;
         player2_atk = int.Parse(player2_atk_input.text);
@@ -63,8 +65,16 @@ public class game_manager : MonoBehaviour
 
     void battle()
     {
-        while(true)
+        int s = 0;
+        while (true)
         {
+            s++;
+            if (s == 100)
+            {
+                break;
+            }
+            Debug.Log("1hp : "+player1_hp);
+
             int first_attack;
             string print_text = "";
             while (true)
@@ -83,6 +93,7 @@ public class game_manager : MonoBehaviour
                     break;
                 }
             }
+
             if (first_attack == 1)
             {
                 int damage = Random.Range(0, player1_atk) - Random.Range(0, player2_def);
@@ -114,28 +125,34 @@ public class game_manager : MonoBehaviour
                 else
                 {
                     print_text = player2_name + "의 공격 " + player1_name + "는 " + damage + "데미지를 입었다.";
-                    player1_hp = player2_hp - damage;
+                    player1_hp = player1_hp - damage;
                 }
             }
-
+            text_window.text += (print_text+"\n");
             Debug.Log(print_text);
 
             if (player1_hp < 1)
             {
+                print_text = player1_name + "이(가) 쓰러졌다.";
+                text_window.text += (print_text + "\n");
+                Debug.Log(print_text);
                 break;
             }
             if (player2_hp < 1)
             {
+                print_text = player2_name + "이(가) 쓰러졌다.";
+                text_window.text += (print_text + "\n");
+                Debug.Log(print_text);
                 break;
             }
         }
     }
-    
+
 
     public void On_click()
     {
         status_setting();
         battle();
-        
+
     }
 }
