@@ -10,6 +10,9 @@ public class game_manager : MonoBehaviour
 
 {
     public Text text_window;
+    public Scrollbar Bar;
+    public Slider hp1;
+    public Slider hp2;
 
     public Text player1_name_input;
     public Text player1_atk_input;
@@ -34,8 +37,24 @@ public class game_manager : MonoBehaviour
     public int player1_hp;
     public int player2_hp;
 
+
+    public int _atk = 0;
+
+    List<Dictionary<string, object>> data;
+
     // Start is called before the first frame update
     void Start()
+    {
+        data = CSVReader.Read("save");
+
+        for (var i = 0; i < data.Count; i++)
+        {
+            Debug.Log("index " + (i).ToString() + " : " + data[i]["name"] + " " + data[i]["atk"] + " " + data[i]["def"] + " " + data[i]["tec"]);
+        }
+
+    }
+
+    void load(int num)
     {
 
     }
@@ -62,17 +81,24 @@ public class game_manager : MonoBehaviour
         player2_tec = int.Parse(player2_tec_input.text);
 
     }
-
+    void time()
+    {
+        Debug.Log("시간지연");
+    }
     void battle()
     {
-        int s = 0;
+        int hab = 0;
         while (true)
         {
-            s++;
-            if (s == 100)
+            Invoke("time", 1f);
+            hp1.value = (float)player1_hp / 100;
+            hp2.value = (float)player2_hp / 100;
+            hab++;
+            if (hab>5 && Bar.value>0.1)
             {
-                break;
+                Bar.value= Bar.value-0.01f;
             }
+
             Debug.Log("1hp : "+player1_hp);
 
             int first_attack;
@@ -135,6 +161,7 @@ public class game_manager : MonoBehaviour
             {
                 print_text = player1_name + "이(가) 쓰러졌다.";
                 text_window.text += (print_text + "\n");
+                hp1.value = 0;
                 Debug.Log(print_text);
                 break;
             }
@@ -143,8 +170,11 @@ public class game_manager : MonoBehaviour
                 print_text = player2_name + "이(가) 쓰러졌다.";
                 text_window.text += (print_text + "\n");
                 Debug.Log(print_text);
+                hp2.value = 0;
                 break;
             }
+
+            
         }
     }
 
